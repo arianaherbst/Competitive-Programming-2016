@@ -6,7 +6,7 @@ import java.util.*;
  * @author Ariana Herbst
  * August 28, 2016
  */
-public class DuelingPhilosophers {
+public class TopologicalSorting_DuelingPhilosophers {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
