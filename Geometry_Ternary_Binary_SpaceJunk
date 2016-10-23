@@ -1,0 +1,102 @@
+import java.util.Scanner;
+/**
+ * https://open.kattis.com/problems/junk
+ * @author Ariana Herbst and Daniel Moyer
+ * October 22, 2016
+ */
+public class Geometry_Ternary_Binary_SpaceJunk {
+    static Vect s, j;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt();
+        for (int t = 0; t < T; t++)
+        {
+            s= new Vect(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt(),
+                    sc.nextInt(), sc.nextInt(), sc.nextInt());
+            
+            j= new Vect(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt(),
+                    sc.nextInt(), sc.nextInt(), sc.nextInt());
+            double t0 = func(0);
+            double t1 = func(.0001);
+            //System.out.println(func(1.111));
+//          if ((t1 - t0) >= -1.0e-15)  {
+            if ((t1 - t0) >= -100*Math.ulp((t1 - t0)))  {
+//              System.err.println(t0 + " " + t1);
+                System.out.println("No collision");
+                continue;
+            }
+            double rightBound = 1;
+            while (func(rightBound) <= t0)
+                rightBound *= 2;
+            
+            double min = ternarySearch(0, rightBound);
+
+            //System.out.println(func(min));
+            double val = func(min);
+            
+            if (val >= 1000.0 * Math.ulp(min)) {
+                System.out.println("No collision");
+                continue;
+            }
+            double ans = binarySearch(0, min, 0);
+//          System.err.println("ans");
+            System.out.println(String.format("%.3f", ans));
+            
+            
+        }
+        sc.close();
+    }
+    
+    static double binarySearch(double low, double high, double y)
+    {
+        while ((high - low) > Math.max(1e-16, 10 * Math.ulp(high))) {
+            double mid = (low + high) / 2.0;
+            double midVal = -1 *func(mid);
+            
+            if (midVal < y)
+                low = mid;
+            else
+                high = mid;
+        }
+        return (low + high) / 2.0;
+    }
+    
+    static double ternarySearch(double left, double right)
+    {
+        while (true)
+        {
+            if (Math.abs(right - left) < 10 * Math.ulp(right))
+                return (left + right) / 2;
+            
+            double leftThird = (2 * left + right) / 3;
+            double rightThird  = (left + 2 * right) / 3;
+            
+            if (func(leftThird) < func(rightThird))
+                right = rightThird;
+            else
+                left = leftThird;
+        }
+    }
+    
+    
+    
+    public static double func (double t)
+    {
+        double dx = Math.pow((s.x - j.x) + t * (s.vx - j.vx), 2); 
+        double dy = Math.pow((s.y - j.y) + t * (s.vy - j.vy), 2);
+        double dz = Math.pow((s.z - j.z) + t * (s.vz - j.vz), 2);
+        return Math.sqrt(dx + dy + dz) - (s.r + j.r);
+    }
+    
+    
+    public static class Vect
+    {
+        int x, y, z, r, vx, vy, vz;
+        public Vect(int x, int y, int z, int r, int vx, int vy, int vz)
+        {
+            this.x = x; this.y = y; this.z = z; this.r = r;
+            this.vx = vx; this.vy = vy; this.vz = vz;
+        }
+    }
+
+}
