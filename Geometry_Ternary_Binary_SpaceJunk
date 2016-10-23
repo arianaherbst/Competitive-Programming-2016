@@ -11,41 +11,71 @@ public class Geometry_Ternary_Binary_SpaceJunk {
         int T = sc.nextInt();
         for (int t = 0; t < T; t++)
         {
+            //create shuttle
             s= new Vect(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt(),
                     sc.nextInt(), sc.nextInt(), sc.nextInt());
-            
+            //create junk
             j= new Vect(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt(),
                     sc.nextInt(), sc.nextInt(), sc.nextInt());
+            //check to see if the distance function is increasing or decreasing between 0 and .0001.
+            //if the distance function is increasing, we know that the objects will never touch because they
+            //are always moving away from each other.
+            //if the distance function is decreasing, we know that the objects may or may not touch.
             double t0 = func(0);
             double t1 = func(.0001);
-            //System.out.println(func(1.111));
-//          if ((t1 - t0) >= -1.0e-15)  {
             if ((t1 - t0) >= -100*Math.ulp((t1 - t0)))  {
-//              System.err.println(t0 + " " + t1);
                 System.out.println("No collision");
                 continue;
             }
+            
+            //finding a right bound for the ternary search
+            //by finding a value of time for which the distance between the objects is greater
+            //than the starting distance between the objects.
             double rightBound = 1;
             while (func(rightBound) <= t0)
                 rightBound *= 2;
             
+            //min gives the time at which the objects are closest together
             double min = ternarySearch(0, rightBound);
-
-            //System.out.println(func(min));
+            //val gives the closest possible distance between the objects, i.e.,
+            //if val <= 0, the objects collide.
             double val = func(min);
-            
             if (val >= 1000.0 * Math.ulp(min)) {
                 System.out.println("No collision");
                 continue;
             }
+            //We have to use a binary search to find the first value of time for which the distance
+            //between the two objects = 0.  i.e., we have to find the first zero of our distance function.
+            //it's guaranteed that this value of time will be between t = 0 and t = min, 
+            //as long as func(min) < 0.
             double ans = binarySearch(0, min, 0);
-//          System.err.println("ans");
             System.out.println(String.format("%.3f", ans));
-            
-            
         }
         sc.close();
     }
+    
+    //input: value of time
+    //output: the distance between the shuttle and the junk at given time.
+    public static double func (double t)
+    {
+        double dx = Math.pow((s.x - j.x) + t * (s.vx - j.vx), 2); 
+        double dy = Math.pow((s.y - j.y) + t * (s.vy - j.vy), 2);
+        double dz = Math.pow((s.z - j.z) + t * (s.vz - j.vz), 2);
+        return Math.sqrt(dx + dy + dz) - (s.r + j.r);
+    }
+    
+    //stores the coordinates, radius, and velocity
+    public static class Vect
+    {
+        int x, y, z, r, vx, vy, vz;
+        public Vect(int x, int y, int z, int r, int vx, int vy, int vz)
+        {
+            this.x = x; this.y = y; this.z = z; this.r = r;
+            this.vx = vx; this.vy = vy; this.vz = vz;
+        }
+    }
+    
+  //The following code is taken from Virginia Tech ACM ICPC Handbook//
     
     static double binarySearch(double low, double high, double y)
     {
@@ -77,26 +107,4 @@ public class Geometry_Ternary_Binary_SpaceJunk {
                 left = leftThird;
         }
     }
-    
-    
-    
-    public static double func (double t)
-    {
-        double dx = Math.pow((s.x - j.x) + t * (s.vx - j.vx), 2); 
-        double dy = Math.pow((s.y - j.y) + t * (s.vy - j.vy), 2);
-        double dz = Math.pow((s.z - j.z) + t * (s.vz - j.vz), 2);
-        return Math.sqrt(dx + dy + dz) - (s.r + j.r);
-    }
-    
-    
-    public static class Vect
-    {
-        int x, y, z, r, vx, vy, vz;
-        public Vect(int x, int y, int z, int r, int vx, int vy, int vz)
-        {
-            this.x = x; this.y = y; this.z = z; this.r = r;
-            this.vx = vx; this.vy = vy; this.vz = vz;
-        }
-    }
-
 }
