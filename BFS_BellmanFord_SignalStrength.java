@@ -5,7 +5,7 @@ import java.util.*;
  * @author Ariana Herbst
  * September 10, 2016
  */
-public class BFS_SignalStrength {
+public class BFS_BellmanFord_SignalStrength {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
