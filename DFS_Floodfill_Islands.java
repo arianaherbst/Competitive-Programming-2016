@@ -39,7 +39,7 @@ public class DFS_Floodfill_Islands {
             }
         }
         
-        //fill clouds next to land with water
+        //change clouds adgacent to land to land
         for (int r = 0; r < N; r++)
         {
             for (int c = 0; c < M; c++)
@@ -50,6 +50,7 @@ public class DFS_Floodfill_Islands {
                 }
             }
         }
+        //turn remaining clouds into water
         for (int r = 0; r < N; r++)
         {
             for (int c = 0; c < M; c++)
@@ -60,6 +61,8 @@ public class DFS_Floodfill_Islands {
                 }
             }
         }
+        //fill each land chunk with water
+        //increment count each separate time fill() is called
         int count = 0;
         for (int r = 0; r < N; r++)
         {
