@@ -6,7 +6,7 @@ import java.util.*;
  * @author Ariana Herbst
  * December 6, 2016
  */
-public class cfs383C {
+public class DFSVariation_LCM_LoudOwf {
 
 	public static void main(String[] args) {
 		FastScanner sc = new FastScanner();
