@@ -1,0 +1,110 @@
+import java.io.*;
+import java.util.*;
+/**
+ * CodeForces 383B, Arpa's obvious problem and Mehrdad's Terrible Solution
+ * http://codeforces.com/problemset/problem/742/B
+ * @author Ariana Herbst
+ * December 6, 2016
+ */
+public class NumberTheory_XOR_CFS {
+
+	public static void main(String[] args) {
+		FastScanner sc = new FastScanner();
+		int N = sc.nextInt();
+		int X = sc.nextInt();
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		int[] nums = new int[N];
+		for (int n = 0; n < N; n++)
+		{
+			int u = sc.nextInt();
+			nums[n] = u;
+			Integer k = map.get(u);
+			if (k == null)
+			{
+				map.put(u, 1);
+			}
+			else	{
+				map.put(u, k + 1);
+			}
+		}
+		long ans = 0;
+
+		for (int k = 0; k < N; k++)
+		{
+			int target = X ^ nums[k];
+			Integer da = map.get(target);
+			if (da != null)
+			{
+				ans += da;
+				if (target == nums[k]) {
+					ans--;
+				}
+			}
+		}
+		System.out.println(ans / 2);
+
+
+	}
+	public static class FastScanner {
+		BufferedReader br;
+		StringTokenizer st;
+
+		public FastScanner(Reader in) {
+			br = new BufferedReader(in);
+		}
+
+		public FastScanner() {
+			this(new InputStreamReader(System.in));
+		}
+
+		String next() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		String readNextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
+
+		int[] readIntArray(int n) {
+			int[] a = new int[n];
+			for (int idx = 0; idx < n; idx++) {
+				a[idx] = nextInt();
+			}
+			return a;
+		}
+
+		long[] readLongArray(int n) {
+			long[] a = new long[n];
+			for (int idx = 0; idx < n; idx++) {
+				a[idx] = nextLong();
+			}
+			return a;
+		}
+	}
+
+}
