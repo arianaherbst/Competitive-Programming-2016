@@ -1,0 +1,137 @@
+import java.io.*;
+import java.util.*;
+/**
+ * CodeForces 383C, Arpa's loud Owf and Mehrdad's evil plan
+ * http://codeforces.com/contest/742/problem/C
+ * @author Ariana Herbst
+ * December 6, 2016
+ */
+public class cfs383C {
+
+	public static void main(String[] args) {
+		FastScanner sc = new FastScanner();
+		int N = sc.nextInt();
+		int[] c = new int[N];
+		for (int n = 0; n < N; n++)
+		{
+			c[n] = sc.nextInt() - 1;
+		}
+		Set<Integer> v = new HashSet<Integer>();
+		ArrayList<Integer> clist = new ArrayList<Integer>();
+		loop:
+		for (int n = 0; n < N; n++)
+		{
+			if (!v.contains(n))	//unvisited
+			{
+				int s = n;
+				int size = 0;
+				int i = n;
+				do {
+					v.add(i);
+					int j = c[i];
+					size++;
+					if (v.contains(j))
+					{
+						if (j == s) //found beginning of cycle
+						{
+							clist.add(size % 2 == 0 ? size / 2 : size);
+							continue loop;
+						}
+						else
+						{
+							System.out.println(-1);
+							System.exit(0);
+						}
+					}
+					i = j;
+				} while (true);
+			}
+		}
+		//for (Integer i : clist)
+			//System.out.println(i);
+		long lcm = 1;
+		for (int i = 0; i < clist.size(); i++)
+		{
+			lcm = lcm(lcm, clist.get(i));
+		}
+		System.out.println(lcm);
+		
+
+	}
+	public static long lcm (long a, long b)
+	{
+		//find gcd
+		long gcd = 1;
+		for (int i = 2; i <= Math.min(a, b); i++)
+		{
+			if (a % i == 0 && b % i == 0)
+				gcd = i;
+			
+		}
+		return  a * b / gcd;
+		
+		
+	}
+	public static class FastScanner {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastScanner(Reader in) {
+            br = new BufferedReader(in);
+        }
+
+        public FastScanner() {
+            this(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String readNextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+
+        int[] readIntArray(int n) {
+            int[] a = new int[n];
+            for (int idx = 0; idx < n; idx++) {
+                a[idx] = nextInt();
+            }
+            return a;
+        }
+
+        long[] readLongArray(int n) {
+            long[] a = new long[n];
+            for (int idx = 0; idx < n; idx++) {
+                a[idx] = nextLong();
+            }
+            return a;
+        }
+    }
+
+}
